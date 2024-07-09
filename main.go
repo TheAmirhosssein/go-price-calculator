@@ -11,7 +11,7 @@ func main() {
 
 	for _, taxRate := range taxRates {
 		jobTax := price.NewTaxIncludeJobPrice(taxRate)
-		jobTax.Process()
+		jobTax.Process("price.txt")
 		fmt.Println(jobTax.TaxIncludedPrice)
 	}
 }
