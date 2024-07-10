@@ -1,4 +1,4 @@
-package utils
+package filemanger
 
 import (
 	"bufio"

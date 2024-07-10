@@ -3,6 +3,7 @@ package price
 import (
 	"fmt"
 
+	"github.com/TheAmirhosssein/go-price-calculator/filemanger"
 	"github.com/TheAmirhosssein/go-price-calculator/utils"
 )
 
@@ -21,7 +22,7 @@ func (job TaxIncludeJobPrice) Process() {
 
 func (job *TaxIncludeJobPrice) loadData() {
 
-	line, err := utils.ReadFile("price.txt")
+	line, err := filemanger.ReadFile("price.txt")
 	if err != nil {
 		fmt.Println(err)
 		return
