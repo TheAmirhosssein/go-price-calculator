@@ -18,6 +18,10 @@ func (job TaxIncludeJobPrice) Process() {
 	for _, price := range job.InputPrices {
 		job.TaxIncludedPrice[fmt.Sprintf("%.2f", price)] = price * (1 + job.TaxRate)
 	}
+	err := filemanger.WriteJson(job.TaxIncludedPrice, fmt.Sprintf("%.2f", job.TaxRate))
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (job *TaxIncludeJobPrice) loadData() {
