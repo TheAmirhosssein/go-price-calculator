@@ -9,8 +9,8 @@ func main() {
 	taxRates := []float64{0, 5, 6}
 
 	for _, taxRate := range taxRates {
-		fileManager := filemanger.New("price.txt", "result.json")
-		jobTax := price.NewTaxIncludeJobPrice(taxRate, fileManager)
+		fm := filemanger.New("price.txt", "result.json")
+		jobTax := price.NewTaxIncludedPriceJob(fm, taxRate)
 		jobTax.Process()
 	}
 }

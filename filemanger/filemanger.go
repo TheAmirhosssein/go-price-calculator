@@ -7,14 +7,12 @@ import (
 	"os"
 )
 
-type stringFloatMap map[string]float64
-
 type FileManager struct {
 	InputPath  string
 	OutputPath string
 }
 
-func (fm FileManager) ReadFile() ([]string, error) {
+func (fm FileManager) ReadLines() ([]string, error) {
 	file, err := os.Open(fm.InputPath)
 
 	if err != nil {
@@ -38,19 +36,19 @@ func (fm FileManager) ReadFile() ([]string, error) {
 	return fileLines, nil
 }
 
-func (fm FileManager) WriteJson(data stringFloatMap, key string) error {
+func (fm FileManager) WriteResult(data map[string]float64, key string) error {
 	jsonData, err := os.ReadFile(fm.OutputPath)
 
 	if os.IsNotExist(err) {
-		startData := make([]map[string]stringFloatMap, 1)
-		startData[0] = make(map[string]stringFloatMap)
+		startData := make([]map[string]map[string]float64, 1)
+		startData[0] = make(map[string]map[string]float64)
 		startData[0][key] = data
 		jsonData, _ = json.Marshal(startData)
 		os.WriteFile(fm.OutputPath, []byte(jsonData), 0644)
 
 	}
 
-	var fileData []map[string]stringFloatMap
+	var fileData []map[string]map[string]float64
 
 	err = json.Unmarshal(jsonData, &fileData)
 	if err != nil {

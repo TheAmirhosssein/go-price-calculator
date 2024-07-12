@@ -6,12 +6,12 @@ import (
 
 func StringToFloatSlice(stringSlice []string) ([]float64, error) {
 	convertedFloats := make([]float64, len(stringSlice))
-	for _, value := range stringSlice {
+	for index, value := range stringSlice {
 		convertedFloat, err := strconv.ParseFloat(value, 64)
 		if err != nil {
 			return nil, err
 		}
-		convertedFloats = append(convertedFloats, convertedFloat)
+		convertedFloats[index] = convertedFloat
 	}
 	return convertedFloats, nil
 }

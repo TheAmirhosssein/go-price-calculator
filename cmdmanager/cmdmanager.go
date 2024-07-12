@@ -2,12 +2,10 @@ package cmdmanager
 
 import "fmt"
 
-type stringFloatMap map[string]float64
-
-type CMDManger struct {
+type CMDManager struct {
 }
 
-func (cmd CMDManger) ReadFile() ([]string, error) {
+func (c *CMDManager) ReadLines() ([]string, error) {
 	var prices []string
 
 	for {
@@ -24,11 +22,11 @@ func (cmd CMDManger) ReadFile() ([]string, error) {
 	return prices, nil
 }
 
-func (cmd CMDManger) WriteJson(data stringFloatMap, key string) error {
+func (c *CMDManager) WriteResult(data map[string]float64, key string) error {
 	fmt.Println(data)
 	return nil
 }
 
-func New() CMDManger {
-	return CMDManger{}
+func New() *CMDManager {
+	return &CMDManager{}
 }

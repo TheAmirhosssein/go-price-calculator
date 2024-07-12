@@ -3,7 +3,7 @@ package price
 import (
 	"fmt"
 
-	"github.com/TheAmirhosssein/go-price-calculator/filemanger"
+	"github.com/TheAmirhosssein/go-price-calculator/iomanager"
 	"github.com/TheAmirhosssein/go-price-calculator/utils"
 )
 
@@ -11,7 +11,7 @@ type TaxIncludeJobPrice struct {
 	TaxRate          float64
 	InputPrices      []float64
 	TaxIncludedPrice map[string]float64
-	FileManger       filemanger.FileManager
+	IoManager        iomanager.IOManager
 }
 
 func (job TaxIncludeJobPrice) Process() {
@@ -19,7 +19,7 @@ func (job TaxIncludeJobPrice) Process() {
 	for _, price := range job.InputPrices {
 		job.TaxIncludedPrice[fmt.Sprintf("%.2f", price)] = price * (1 + job.TaxRate)
 	}
-	err := job.FileManger.WriteJson(job.TaxIncludedPrice, fmt.Sprintf("%.2f", job.TaxRate))
+	err := job.IoManager.WriteResult(job.TaxIncludedPrice, fmt.Sprintf("%.2f", job.TaxRate))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -27,7 +27,7 @@ func (job TaxIncludeJobPrice) Process() {
 
 func (job *TaxIncludeJobPrice) loadData() {
 
-	line, err := job.FileManger.ReadFile()
+	line, err := job.IoManager.ReadLines()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -43,10 +43,11 @@ func (job *TaxIncludeJobPrice) loadData() {
 
 }
 
-func NewTaxIncludeJobPrice(taxRate float64, fm filemanger.FileManager) TaxIncludeJobPrice {
-	return TaxIncludeJobPrice{
+func NewTaxIncludedPriceJob(iom iomanager.IOManager, taxRate float64) *TaxIncludeJobPrice {
+	return &TaxIncludeJobPrice{
+		IoManager:        iom,
+		InputPrices:      []float64{10, 20, 30},
 		TaxRate:          taxRate,
 		TaxIncludedPrice: make(map[string]float64),
-		FileManger:       fm,
 	}
 }
