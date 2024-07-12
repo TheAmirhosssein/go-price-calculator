@@ -9,8 +9,13 @@ import (
 
 type stringFloatMap map[string]float64
 
-func ReadFile(path string) ([]string, error) {
-	file, err := os.Open(path)
+type FileManager struct {
+	InputPath  string
+	OutputPath string
+}
+
+func (fm FileManager) ReadFile() ([]string, error) {
+	file, err := os.Open(fm.InputPath)
 
 	if err != nil {
 		fmt.Println(err)
@@ -33,15 +38,15 @@ func ReadFile(path string) ([]string, error) {
 	return fileLines, nil
 }
 
-func WriteJson(data stringFloatMap, key string) error {
-	jsonData, err := os.ReadFile("result.json")
+func (fm FileManager) WriteJson(data stringFloatMap, key string) error {
+	jsonData, err := os.ReadFile(fm.OutputPath)
 
 	if os.IsNotExist(err) {
 		startData := make([]map[string]stringFloatMap, 1)
 		startData[0] = make(map[string]stringFloatMap)
 		startData[0][key] = data
 		jsonData, _ = json.Marshal(startData)
-		os.WriteFile("result.json", []byte(jsonData), 0644)
+		os.WriteFile(fm.OutputPath, []byte(jsonData), 0644)
 
 	}
 
@@ -55,6 +60,17 @@ func WriteJson(data stringFloatMap, key string) error {
 		jsonItem[key] = data
 	}
 	jsonResultData, err := json.Marshal(fileData)
-	os.WriteFile("result.json", []byte(jsonResultData), 0644)
+	os.WriteFile(fm.OutputPath, []byte(jsonResultData), 0644)
 	return err
+}
+
+func New(inputPath, outputPath string) FileManager {
+	return FileManager{
+		InputPath:  parsePath(inputPath),
+		OutputPath: parsePath(outputPath),
+	}
+}
+
+func parsePath(path string) string {
+	return fmt.Sprintf("files/%v", path)
 }

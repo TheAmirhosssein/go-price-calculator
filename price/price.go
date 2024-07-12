@@ -11,6 +11,7 @@ type TaxIncludeJobPrice struct {
 	TaxRate          float64
 	InputPrices      []float64
 	TaxIncludedPrice map[string]float64
+	FileManger       filemanger.FileManager
 }
 
 func (job TaxIncludeJobPrice) Process() {
@@ -18,7 +19,7 @@ func (job TaxIncludeJobPrice) Process() {
 	for _, price := range job.InputPrices {
 		job.TaxIncludedPrice[fmt.Sprintf("%.2f", price)] = price * (1 + job.TaxRate)
 	}
-	err := filemanger.WriteJson(job.TaxIncludedPrice, fmt.Sprintf("%.2f", job.TaxRate))
+	err := job.FileManger.WriteJson(job.TaxIncludedPrice, fmt.Sprintf("%.2f", job.TaxRate))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -26,7 +27,7 @@ func (job TaxIncludeJobPrice) Process() {
 
 func (job *TaxIncludeJobPrice) loadData() {
 
-	line, err := filemanger.ReadFile("price.txt")
+	line, err := job.FileManger.ReadFile()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -42,9 +43,10 @@ func (job *TaxIncludeJobPrice) loadData() {
 
 }
 
-func NewTaxIncludeJobPrice(taxRate float64) TaxIncludeJobPrice {
+func NewTaxIncludeJobPrice(taxRate float64, fm filemanger.FileManager) TaxIncludeJobPrice {
 	return TaxIncludeJobPrice{
 		TaxRate:          taxRate,
 		TaxIncludedPrice: make(map[string]float64),
+		FileManger:       fm,
 	}
 }

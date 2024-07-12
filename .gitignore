@@ -25,5 +25,4 @@ go.work.sum
 .vscode
 
 # file
-price.txt
-result.json
+files
