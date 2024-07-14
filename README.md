@@ -1,2 +1,2 @@
 # go-price-calculator
-for now i do not have any idea
+This repository is a test project for the Go Price Calculator, designed to demonstrate and validate the core functionalities of price calculation in Go. It serves as a sandbox for experimenting structs and file reading for configuration and input data.
